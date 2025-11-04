@@ -12,7 +12,7 @@ Node* BST::insertRec(Node* node, int value) {
         return new Node(value);
     }
     if (value < node->value) node->left = insertRec(node->left, value);
-    else node->right = insertRec(node->right, value); // duplikaty id¹ w prawo
+    else node->right = insertRec(node->right, value); // duplikaty idÄ… w prawo
     return node;
 }
 
