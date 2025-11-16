@@ -97,5 +97,35 @@ int main() {
             std::cout << "\n";
             std::cin.ignore(10000, '\n');
             break;
+        }case 6: {
+            std::cout << "Iteracyjne preorder: ";
+            tree.preorder_iterative([](int v) { std::cout << v << " "; });
+            std::cout << "\n";
+            break;
+        }
+        case 7: {
+            tree.printGraphical();
+            break;
+        }
+        case 8: {
+            std::cout << "Podaj sciezke pliku tekstowego do zapisu: ";
+            std::string path; std::getline(std::cin, path);
+            if (tree.save_sorted(path) == false) { // reuse sorted save for textual output sorted
+                // fallback: save inorder unsorted
+                tree.to_vector_inorder(); // no-op here
+                std::ofstream ofs(path);
+                if (ofs) {
+                    tree.inorder([&](int v) { ofs << v << "\n"; });
+                    ofs.close();
+                    std::cout << "Zapisano inorder\n";
+                }
+                else {
+                    std::cout << "Blad zapisu\n";
+                }
+            }
+            else {
+                std::cout << "Zapisano posortowane\n";
+            }
+            break;
         }
 
