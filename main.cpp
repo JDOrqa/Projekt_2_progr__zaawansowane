@@ -127,5 +127,71 @@ int main() {
                 std::cout << "Zapisano posortowane\n";
             }
             break;
+        }case 9: {
+            std::cout << "Podaj sciezke pliku do zapisu posortowanego: ";
+            std::string path; std::getline(std::cin, path);
+            if (tree.save_sorted(path)) std::cout << "Zapisano posortowane\n";
+            else std::cout << "Blad zapisu\n";
+            break;
         }
+        case 10: {
+            std::cout << "Podaj sciezke pliku binarnego do zapisu: ";
+            std::string path; std::getline(std::cin, path);
+            if (FileHandler::saveBinary(tree, path)) std::cout << "Zapisano binarnie\n";
+            else std::cout << "Blad zapisu\n";
+            break;
+        }
+        case 11: {
+            std::cout << "Podaj sciezke pliku binarnego do wczytania: ";
+            std::string path; std::getline(std::cin, path);
+            std::vector<int> vals;
+            if (!FileHandler::loadBinary(vals, path)) {
+                std::cout << "Blad odczytu\n";
+            }
+            else {
+                std::cout << "Wczytano " << vals.size() << " elementow Wczytac do: 1) pustego drzewa 2) istniejącego drzewa ? ";
+                int mode; if (!(std::cin >> mode)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
+                if (mode == 1) tree.clear();
+                for (int x : vals) tree.insert(x);
+                std::cout << "Wstawiono elementy\n";
+                std::cin.ignore(10000, '\n');
+            }
+            break;
+        }
+        case 12: {
+            std::cout << "Podaj sciezke pliku tekstowego do wczytania (liczby): ";
+            std::string path; std::getline(std::cin, path);
+            std::vector<int> vals;
+            if (!FileHandler::loadTextNumbers(vals, path)) {
+                std::cout << "Blad odczytu\n";
+            }
+            else {
+                std::cout << "Wczytano " << vals.size() << " liczb - Wczytać do: 1) pustego drzewa 2) istniejącego drzewa ? ";
+                int mode; if (!(std::cin >> mode)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
+                if (mode == 1) tree.clear();
+                for (int x : vals) tree.insert(x);
+                std::cout << "Wstawiono elementy\n";
+                std::cin.ignore(10000, '\n');
+            }
+            break;
+        }
+        case 13: {
+            std::cout << "Size: " << tree.size() << "\n";
+            std::cout << "Empty: " << (tree.empty() ? "tak" : "nie") << "\n";
+            std::cout << "Podaj wartosc do find(): ";
+            int v; if (!(std::cin >> v)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
+            std::cout << (tree.find(v) ? "Znaleziono\n" : "Nie znaleziono\n");
+            std::cin.ignore(10000, '\n');
+            break;
+        }
+        case 0:
+            running = false;
+            break;
+        default:
+            std::cout << "Nieprawidlowy wybor\n";
+        }
+    }
+    std::cout << "Koniec programu \n";
+    return 0;
+}
 
