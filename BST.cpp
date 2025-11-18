@@ -16,7 +16,7 @@ Node* BST::insertRec(Node* node, int value) {
     return node;
 }
 
-void BST::insert(int value) {
+void BST::insert(int root) {
     root = insertRec(root, value);
 }
 
