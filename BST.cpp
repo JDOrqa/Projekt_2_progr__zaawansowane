@@ -16,7 +16,7 @@ Node* BST::insertRec(Node* node, int value) {
     return node;
 }
 
-void BST::insert(int wartosc) { //edycja
+void BST::insert(int value) { 
     root = insertRec(root, value);
 }
 
