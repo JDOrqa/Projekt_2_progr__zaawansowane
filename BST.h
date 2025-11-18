@@ -25,7 +25,7 @@ public:
     // Usun element — zwraca true jeœli usuniêto
     bool remove(int value);
 
-    // Usun ca³e drzewo
+    // Usun ca³e drzewoo
     void clear();
 
    

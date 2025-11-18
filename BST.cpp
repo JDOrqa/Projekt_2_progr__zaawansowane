@@ -29,13 +29,13 @@ Node* BST::findMin(Node* node) const {
 Node* BST::removeRec(Node* node, int value, bool& removed) {
     if (!node) return nullptr;
     if (value < node->value) {
-        node->left = removeRec(node->left, value, removed);
+        node->left = removeRec(node->left, value, removed); //ok
     }
     else if (value > node->value) {
         node->right = removeRec(node->right, value, removed);
     }
     else {
-        // found node to delete
+        
         removed = true;
         if (!node->left) {
             Node* r = node->right;
