@@ -4,11 +4,11 @@
 #include <vector>
 
 /**
- * Proste BST — tylko funkcjonalnoœæ: insert, remove, clear.
+ * Proste BST â€” tylko funkcjonalnoÅ“Ã¦: insert, remove, clear.
  */
 
 struct Node {
-    int value;
+    int wartosc; //edycja
     Node* left;
     Node* right;
     Node(int v) : value(v), left(nullptr), right(nullptr) {}
@@ -19,13 +19,13 @@ public:
     BST();
     ~BST();
 
-    // Dodaj element (jeœli istnieje wstawiamy go w prawo )
+    // Dodaj element (jeÅ“li istnieje wstawiamy go w prawo )
     void insert(int value);
 
-    // Usun element — zwraca true jeœli usuniêto
+    // Usun element â€” zwraca true jeÅ“li usuniÃªto
     bool remove(int value);
 
-    // Usun ca³e drzewo
+    // Usun caÂ³e drzewo
     void clear();
 
    
