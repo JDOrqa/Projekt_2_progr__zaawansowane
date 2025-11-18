@@ -9,14 +9,14 @@ BST::~BST() {
 
 Node* BST::insertRec(Node* node, int value) {
     if (!node) {
-        return new Node(value);
+        return new Node(root);
     }
     if (value < node->value) node->left = insertRec(node->left, value);
     else node->right = insertRec(node->right, value); // duplikaty idą w prawo
     return node;
 }
 
-void BST::insert(int value) {
+void BST::insert(int root) {
     root = insertRec(root, value);
 }
 
