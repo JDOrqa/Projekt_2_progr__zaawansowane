@@ -5,11 +5,13 @@
 #include "BST.h"
 #include "FileHandler.h"
 
+// Funkcja pomocnicza do pauzowania programu
 void pause() {
     std::cout << "Nacisnij Enter";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+// Menu główne programu
 int menu() {
     std::cout << "\n Menu \n";
     std::cout << "1. Dodaj element\n";
@@ -27,7 +29,9 @@ int menu() {
     std::cout << "13. Pokaz size/empty/find\n";
     std::cout << "0. Wyjscie\n";
     std::cout << "Wybor: ";
+    
     int c;
+    // Zabezpieczenie przed błędnym wprowadzeniem
     if (!(std::cin >> c)) {
         std::cin.clear();
         std::cin.ignore(10000, '\n');
@@ -38,12 +42,14 @@ int menu() {
 }
 
 int main() {
-    BST tree;
+    BST tree; // Główne drzewo BST
     bool running = true;
+    
     while (running) {
         int choice = menu();
         switch (choice) {
         case 1: {
+            // Dodawanie elementu do drzewa
             std::cout << "Podaj liczbe calkowita do dodania: ";
             int v;
             if (!(std::cin >> v)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
@@ -53,6 +59,7 @@ int main() {
             break;
         }
         case 2: {
+            // Usuwanie elementu z drzewa
             std::cout << "Podaj liczbe do usuniecia: ";
             int v;
             if (!(std::cin >> v)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
@@ -62,11 +69,13 @@ int main() {
             break;
         }
         case 3: {
+            // Usuwanie całego drzewa
             tree.clear();
             std::cout << "Usunieto cale drzewo\n";
             break;
         }
         case 4: {
+            // Wyszukiwanie ścieżki do elementu
             std::cout << "Podaj szukany element: ";
             int v; if (!(std::cin >> v)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
             auto path = tree.findPath(v);
@@ -83,6 +92,7 @@ int main() {
             break;
         }
         case 5: {
+            // Wyświetlanie drzewa różnymi metodami
             std::cout << "Wybierz metode: 1) preorder 2) inorder 3) postorder : ";
             int t; if (!(std::cin >> t)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
             if (t == 1) {
@@ -99,21 +109,24 @@ int main() {
             break;
         }
         case 6: {
+            // Iteracyjne wyświetlanie preorder z użyciem stosu
             std::cout << "Iteracyjne preorder: ";
             tree.preorder_iterative([](int v) { std::cout << v << " "; });
             std::cout << "\n";
             break;
         }
         case 7: {
+            // Graficzne wyświetlanie drzewa
             tree.printGraphical();
             break;
         }
         case 8: {
+            // Zapis drzewa do pliku tekstowego w porządku inorder
             std::cout << "Podaj sciezke pliku tekstowego do zapisu: ";
             std::string path; std::getline(std::cin, path);
             if (tree.save_sorted(path) == false) { 
-                
-                tree.to_vector_inorder(); 
+                // Alternatywny zapis jeśli główna metoda zawiedzie
+                tree.to_vector_inorder();
                 std::ofstream ofs(path);
                 if (ofs) {
                     tree.inorder([&](int v) { ofs << v << "\n"; });
@@ -130,6 +143,7 @@ int main() {
             break;
         }
         case 9: {
+            // Zapis posortowanych wartości do pliku
             std::cout << "Podaj sciezke pliku do zapisu posortowanego: ";
             std::string path; std::getline(std::cin, path);
             if (tree.save_sorted(path)) std::cout << "Zapisano posortowane\n";
@@ -137,6 +151,7 @@ int main() {
             break;
         }
         case 10: {
+            // Zapis drzewa do pliku binarnego
             std::cout << "Podaj sciezke pliku binarnego do zapisu: ";
             std::string path; std::getline(std::cin, path);
             if (FileHandler::saveBinary(tree, path)) std::cout << "Zapisano binarnie\n";
@@ -144,6 +159,7 @@ int main() {
             break;
         }
         case 11: {
+            // Wczytywanie drzewa z pliku binarnego
             std::cout << "Podaj sciezke pliku binarnego do wczytania: ";
             std::string path; std::getline(std::cin, path);
             std::vector<int> vals;
@@ -151,7 +167,7 @@ int main() {
                 std::cout << "Blad odczytu\n";
             }
             else {
-                std::cout << "Wczytano " << vals.size() << " elementow Wczytac do: 1) pustego drzewa 2) istniejącego drzewa ? ";
+                std::cout << "Wczytano " << vals.size() << " elementow Wczytac do: 1) pustego drzewa 2) istniejacego drzewa ? ";
                 int mode; if (!(std::cin >> mode)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
                 if (mode == 1) tree.clear();
                 for (int x : vals) tree.insert(x);
@@ -161,14 +177,15 @@ int main() {
             break;
         }
         case 12: {
-            std::cout << "Podaj sciezke pliku tekstowego do wczytania (liczby): ";
+            // Wczytywanie liczb z pliku tekstowego
+            std::cout << "Podaj sciezke pliku tekstowego do wczytania : ";
             std::string path; std::getline(std::cin, path);
             std::vector<int> vals;
             if (!FileHandler::loadTextNumbers(vals, path)) {
                 std::cout << "Blad odczytu\n";
             }
             else {
-                std::cout << "Wczytano " << vals.size() << " liczb - Wczytać do: 1) pustego drzewa 2) istniejącego drzewa ? ";
+                std::cout << "Wczytano " << vals.size() << " liczb - Wczytac do: 1) pustego drzewa 2) istniejacego drzewa ? ";
                 int mode; if (!(std::cin >> mode)) { std::cin.clear(); std::cin.ignore(10000, '\n'); break; }
                 if (mode == 1) tree.clear();
                 for (int x : vals) tree.insert(x);
@@ -178,6 +195,7 @@ int main() {
             break;
         }
         case 13: {
+            // Informacje o drzewie i wyszukiwanie
             std::cout << "Size: " << tree.size() << "\n";
             std::cout << "Empty: " << (tree.empty() ? "tak" : "nie") << "\n";
             std::cout << "Podaj wartosc do find(): ";
