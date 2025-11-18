@@ -8,7 +8,7 @@
  */
 
 struct Node {
-    int wartosc; //edycja
+    int value; 
     Node* left;
     Node* right;
     Node(int v) : value(v), left(nullptr), right(nullptr) {}
