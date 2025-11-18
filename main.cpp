@@ -111,9 +111,9 @@ int main() {
         case 8: {
             std::cout << "Podaj sciezke pliku tekstowego do zapisu: ";
             std::string path; std::getline(std::cin, path);
-            if (tree.save_sorted(path) == false) { // reuse sorted save for textual output sorted
-                // fallback: save inorder unsorted
-                tree.to_vector_inorder(); // no-op here
+            if (tree.save_sorted(path) == false) { 
+                
+                tree.to_vector_inorder(); 
                 std::ofstream ofs(path);
                 if (ofs) {
                     tree.inorder([&](int v) { ofs << v << "\n"; });
