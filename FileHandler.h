@@ -5,17 +5,15 @@
 #include <vector>
 #include "BST.h"
 
-/**
- * Klasa pomocnicza do zapisu / odczytu:
- * - saveBinary/loadBinary (binarnie: uint64_t n + n * int)
- * - loadTextNumbers (wczytuje liczby ca³kowite z pliku tekstowego)
- */
+//Klasa pomocnicza do zapisu / odczytu
 class FileHandler {
 public:
+    //saveBinary/loadBinary (binarnie: uint64_t n + n * int)
     static bool saveBinary(const BST& tree, const std::string& filepath);
     static bool loadBinary(std::vector<int>& out_vals, const std::string& filepath);
-
+    //loadTextNumbers (wczytuje liczby calkowite z pliku tekstowego)
     static bool loadTextNumbers(std::vector<int>& out_vals, const std::string& filepath);
 };
 
 #endif // FILEHANDLER_H
+
