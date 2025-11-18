@@ -8,7 +8,7 @@
  */
 
 struct Node {
-    int wartosc; //edycja
+    int value; 
     Node* left;
     Node* right;
     Node(int v) : value(v), left(nullptr), right(nullptr) {}
@@ -25,7 +25,7 @@ public:
     // Usun element — zwraca true jeœli usuniêto
     bool remove(int value);
 
-    // Usun ca³e drzewo
+    // Usun ca³e drzewoo
     void clear();
 
    
