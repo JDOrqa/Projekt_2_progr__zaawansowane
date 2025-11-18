@@ -5,9 +5,13 @@
 #include <fstream>
 #include <iomanip>
 
+// Konstruktor i destruktor
 BST::BST() : root(nullptr), nodeCount(0) {}
 BST::~BST() { clear(); }
 
+/**
+ * @brief Rekurencyjne wstawianie elementu do drzewa
+ */
 Node* BST::insertRec(Node* node, int value) {
     if (!node) {
         return new Node(value);
@@ -22,13 +26,18 @@ void BST::insert(int value) {
     ++nodeCount;
 }
 
+/**
+ * @brief Znajduje minimalny element w poddrzewie
+ */
 Node* BST::findMin(Node* node) const {
     while (node && node->left) node = node->left;
     return node;
 }
 
-// removeRec: removed ustawiamy tylko wtedy gdy faktycznie usunięto węzeł;
-// gdy węzeł ma dwóch dzieci -> kopiujemy sukcesora i wywołujemy remove na prawym poddrzewie
+/**
+ * @brief Rekurencyjne usuwanie elementu z drzewa
+ * Obsługuje trzy przypadki: brak dzieci, jedno dziecko, dwa dzieci
+ */
 Node* BST::removeRec(Node* node, int value, bool& removed) {
     if (!node) return nullptr;
     if (value < node->value) {
@@ -38,25 +47,26 @@ Node* BST::removeRec(Node* node, int value, bool& removed) {
         node->right = removeRec(node->right, value, removed);
     }
     else {
-        // node->value == value
+        // Znaleziono element do usunięcia
         if (!node->left) {
+            // Przypadek 1: Brak lewego dziecka
             Node* r = node->right;
             delete node;
             removed = true;
             return r;
         }
         else if (!node->right) {
+            // Przypadek 2: Brak prawego dziecka
             Node* l = node->left;
             delete node;
             removed = true;
             return l;
         }
         else {
-            // two children: replace value by successor and delete successor from right subtree
+            // Przypadek 3: Dwoje dzieci - zastąp przez następnika inorder
             Node* succ = findMin(node->right);
             node->value = succ->value;
             node->right = removeRec(node->right, succ->value, removed);
-            // removed will be set by recursive call (when successor gets removed)
         }
     }
     return node;
@@ -69,6 +79,9 @@ bool BST::erase(int value) {
     return removed;
 }
 
+/**
+ * @brief Rekurencyjne usuwanie całego drzewa (postorder)
+ */
 void BST::clearRec(Node* node) {
     if (!node) return;
     clearRec(node->left);
@@ -82,9 +95,13 @@ void BST::clear() {
     nodeCount = 0;
 }
 
+// Metody informacyjne
 size_t BST::size() const { return nodeCount; }
 bool BST::empty() const { return root == nullptr; }
 
+/**
+ * @brief Iteracyjne wyszukiwanie elementu w drzewie
+ */
 bool BST::find(int value) const {
     Node* cur = root;
     while (cur) {
@@ -95,18 +112,21 @@ bool BST::find(int value) const {
     return false;
 }
 
+// Metody przechodzenia drzewa (rekurencyjne)
 void BST::preorderRec(Node* node, const std::function<void(int)>& cb) const {
     if (!node) return;
     cb(node->value);
     preorderRec(node->left, cb);
     preorderRec(node->right, cb);
 }
+
 void BST::inorderRec(Node* node, const std::function<void(int)>& cb) const {
     if (!node) return;
     inorderRec(node->left, cb);
     cb(node->value);
     inorderRec(node->right, cb);
 }
+
 void BST::postorderRec(Node* node, const std::function<void(int)>& cb) const {
     if (!node) return;
     postorderRec(node->left, cb);
@@ -114,10 +134,15 @@ void BST::postorderRec(Node* node, const std::function<void(int)>& cb) const {
     cb(node->value);
 }
 
+// Publiczne metody przechodzenia
 void BST::preorder(const std::function<void(int)>& cb) const { preorderRec(root, cb); }
 void BST::inorder(const std::function<void(int)>& cb) const { inorderRec(root, cb); }
 void BST::postorder(const std::function<void(int)>& cb) const { postorderRec(root, cb); }
 
+/**
+ * @brief Iteracyjne przechodzenie preorder z użyciem stosu
+ * Stos przechowuje węzły do odwiedzenia w odpowiedniej kolejności
+ */
 void BST::preorder_iterative(const std::function<void(int)>& cb) const {
     if (!root) return;
     std::stack<Node*> st;
@@ -125,33 +150,44 @@ void BST::preorder_iterative(const std::function<void(int)>& cb) const {
     while (!st.empty()) {
         Node* cur = st.top(); st.pop();
         cb(cur->value);
+        // Najpierw prawe, potem lewe - bo stos jest LIFO
         if (cur->right) st.push(cur->right);
         if (cur->left) st.push(cur->left);
     }
 }
 
+/**
+ * @brief Konwersja drzewa do wekta w porządku inorder
+ */
 std::vector<int> BST::to_vector_inorder() const {
     std::vector<int> out;
     inorder([&](int v) { out.push_back(v); });
     return out;
 }
 
+/**
+ * @brief Zapis posortowanych wartości do pliku tekstowego
+ * Wykorzystuje std::sort do sortowania wartości
+ */
 bool BST::save_sorted(const std::string& filepath) const {
     std::vector<int> v = to_vector_inorder();
-    std::sort(v.begin(), v.end()); // STL usage
+    std::sort(v.begin(), v.end()); // STL używany
     std::ofstream ofs(filepath);
     if (!ofs) return false;
     for (int x : v) ofs << x << "\n";
     return true;
 }
 
+/**
+ * @brief Graficzne wyświetlanie drzewa (obrócone o 90 stopni)
+ */
 void BST::printGraphicalRec(Node* node, int space) const {
     if (!node) return;
     const int INDENT = 6;
     space += INDENT;
-    printGraphicalRec(node->right, space);
+    printGraphicalRec(node->right, space); // Najpierw prawe poddrzewo
     std::cout << std::setw(space) << "" << node->value << "\n";
-    printGraphicalRec(node->left, space);
+    printGraphicalRec(node->left, space);  // Potem lewe poddrzewo
 }
 
 void BST::printGraphical() const {
@@ -162,6 +198,10 @@ void BST::printGraphical() const {
     printGraphicalRec(root, 0);
 }
 
+/**
+ * @brief Rekurencyjne wyszukiwanie ścieżki do elementu
+ * Zwraca true jeśli znaleziono element, false w przeciwnym przypadku
+ */
 bool BST::findPathRec(Node* node, int value, std::vector<int>& path) const {
     if (!node) return false;
     path.push_back(node->value);
@@ -172,7 +212,7 @@ bool BST::findPathRec(Node* node, int value, std::vector<int>& path) const {
     else {
         if (findPathRec(node->right, value, path)) return true;
     }
-    path.pop_back();
+    path.pop_back(); // Backtrack jeśli nie znaleziono
     return false;
 }
 
