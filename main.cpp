@@ -97,7 +97,8 @@ int main() {
             std::cout << "\n";
             std::cin.ignore(10000, '\n');
             break;
-        }case 6: {
+        }
+        case 6: {
             std::cout << "Iteracyjne preorder: ";
             tree.preorder_iterative([](int v) { std::cout << v << " "; });
             std::cout << "\n";
@@ -127,7 +128,8 @@ int main() {
                 std::cout << "Zapisano posortowane\n";
             }
             break;
-        }case 9: {
+        }
+        case 9: {
             std::cout << "Podaj sciezke pliku do zapisu posortowanego: ";
             std::string path; std::getline(std::cin, path);
             if (tree.save_sorted(path)) std::cout << "Zapisano posortowane\n";
@@ -194,4 +196,3 @@ int main() {
     std::cout << "Koniec programu \n";
     return 0;
 }
-
